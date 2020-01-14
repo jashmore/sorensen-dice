@@ -19,15 +19,16 @@ namespace SorensenDice.Helper
 
         [SqlFunction(
             DataAccess = DataAccessKind.None,
-            FillRowMethodName = "FillRowMethod",
+            //FillRowMethodName = "FillRowMethod",            
             IsDeterministic = true)
         ]
+        [return: SqlFacet(Precision = 8, Scale = 6)]
         public static decimal ComputeSorensenDiceIndex(string fingerprint1, string fingerprint2)
         {
             int[] fp1 = Array.ConvertAll(fingerprint1.Split(','), int.Parse);
             int[] fp2 = Array.ConvertAll(fingerprint2.Split(','), int.Parse);
 
-            return SorensenDiceHelper.Intersection(fp1, fp2);
+            return SorensenDiceHelper.ComputeSorensenDiceIndex(fp1, fp2);
         }
 
         [SqlFunction(

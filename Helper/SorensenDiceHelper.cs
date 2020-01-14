@@ -36,11 +36,11 @@ namespace SorensenDice.Helper
         }
 
 
-        public static double ComputeSorensenDiceIndex(int[] fp1, int[] fp2)
+        public static decimal ComputeSorensenDiceIndex(int[] fp1, int[] fp2)
         {
             // The “double” forces floating point division
             // otherwise it uses integer division and the result here is always 0 or 1
-            double score = Intersection(fp1, fp2);
+            decimal score = Intersection(fp1, fp2);
             return (2 * score) / (fp2.Length + fp1.Length);
         }
 

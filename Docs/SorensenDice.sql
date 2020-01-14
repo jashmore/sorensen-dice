@@ -38,7 +38,7 @@ GO
 CREATE ASSEMBLY SorensenDice FROM 'YOUR_PATH\SorensenDice.Helper.dll' WITH PERMISSION_SET = SAFE
 GO
 
-Create Function ComputeSorensenDiceIndex(@IPFingerprint1 NVARCHAR(MAX), @IPFingerprint2 NVARCHAR(MAX)) RETURNS DECIMAL
+Create Function ComputeSorensenDiceIndex(@IPFingerprint1 NVARCHAR(MAX), @IPFingerprint2 NVARCHAR(MAX)) RETURNS DECIMAL(8,6)
 AS
 	External name SorensenDice.[SorensenDice.Helper.CLRFunctions].ComputeSorensenDiceIndex
 GO
@@ -81,5 +81,6 @@ GO
 
 -- Test it!
 DECLARE  @fingerprint NVARCHAR(MAX)
-SET @fingerprint = (select dbo.GetSorensenDiceFingerprint ('pulmon exam'));
+SET @fingerprint = (select dbo.GetSorensenDiceFingerprint ('puln ex'));
+print @fingerprint;
 EXEC GetMatchesBySorensenDice @fingerprint;
