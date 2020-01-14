@@ -3,12 +3,7 @@
 namespace SorensenDice.Helper
 {
     public static class SorensenDiceHelper
-    {
-        /// <summary>
-        /// Computes the string fingerprint
-        /// </summary>
-        /// <param name="inputString"></param>
-        /// <returns></returns>
+    {        
         public static int[] ComputeFingerPrint(string inputString)
         {
             if (inputString == null)
@@ -35,11 +30,8 @@ namespace SorensenDice.Helper
             return fp;
         }
 
-
         public static decimal ComputeSorensenDiceIndex(int[] fp1, int[] fp2)
-        {
-            // The “double” forces floating point division
-            // otherwise it uses integer division and the result here is always 0 or 1
+        {            
             decimal score = Intersection(fp1, fp2);
             return (2 * score) / (fp2.Length + fp1.Length);
         }
@@ -49,15 +41,10 @@ namespace SorensenDice.Helper
             s = s.Replace("'", "");
             s = s.Replace("-", " ");
             s = s.Replace("  ", " ");
+
             return s.ToLower();
         }
 
-        /// <summary>
-        /// Counts the Intersection of two fingerprints
-        /// </summary>
-        /// <param name="fp1"></param>
-        /// <param name="fp2"></param>
-        /// <returns>Returns an integer value representing ... </returns>
         public static int Intersection(int[] fp1, int[] fp2)
         {
             int matches = 0;

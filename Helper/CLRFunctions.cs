@@ -9,17 +9,6 @@ namespace SorensenDice.Helper
     {
         [SqlFunction(
             DataAccess = DataAccessKind.None,
-            FillRowMethodName = "FillRowMethod",
-            IsDeterministic = true)
-        ]        
-        public static string HelloWorld()
-        {
-            return "Hello World";
-        }
-
-        [SqlFunction(
-            DataAccess = DataAccessKind.None,
-            //FillRowMethodName = "FillRowMethod",            
             IsDeterministic = true)
         ]
         [return: SqlFacet(Precision = 8, Scale = 6)]
