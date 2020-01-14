@@ -1,8 +1,8 @@
 To use this project:
 
-1. In the SorensenDice.sql file (in this folder), create the MedicalTerminology table on your SQL Server.
+1. In the SorensenDice.sql file (in the Docs folder), create the MedicalTerminology table on your SQL Server.
 
-2. Import the data from CMS32_DESC_LONG_SHORT_DX.xlsx (in this folder) to the MedicalTerminology, mapping the columns appropriately. This file contains a list of approximately 14,000 medical diagnoses.
+2. Import the data from CMS32_DESC_LONG_SHORT_DX.xlsx (in the Docs folder) to the MedicalTerminology, mapping the columns appropriately. This file contains a list of approximately 14,000 medical diagnoses.
 
 3. Compile the solution. Note that the version of .NET that the Helper project is compiled with will have to be no later than the version of .NET that the SQL Server is using. You can determine this using the query at the top of the included SorensenDice.sql file.
 
