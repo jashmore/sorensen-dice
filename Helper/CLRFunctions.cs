@@ -1,6 +1,7 @@
 ﻿using Microsoft.SqlServer.Server;
 using System;
 using System.Data.SqlTypes;
+using System.Linq;
 
 namespace SorensenDice.Helper
 {
@@ -27,6 +28,18 @@ namespace SorensenDice.Helper
             int[] fp2 = Array.ConvertAll(fingerprint2.Split(','), int.Parse);
 
             return SorensenDiceHelper.Intersection(fp1, fp2);
+        }
+
+        [SqlFunction(
+            DataAccess = DataAccessKind.None,
+            FillRowMethodName = "FillRowMethod",
+            IsDeterministic = true)
+        ]
+        public static string GetSorensenDiceFingerprint(string input)
+        {
+            int[] fingerprint = SorensenDiceHelper.ComputeFingerPrint(input);
+
+            return fingerprint != null &&  fingerprint.Any() ? string.Join(",", fingerprint) : null;
         }
 
         public static void FillRowMethod(object input, out SqlChars results)

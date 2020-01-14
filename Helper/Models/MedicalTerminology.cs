@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace SorensenDice.Helper.Models
+﻿namespace SorensenDice.Helper.Models
 {
-    public class MedicalProcedure
+    public class MedicalTerminology
     {
         public string Code { get; set; }
         public string ShortDescription { get; set; }

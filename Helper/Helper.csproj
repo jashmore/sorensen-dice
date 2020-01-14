@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -40,9 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CLRHelper.cs" />
-    <Compile Include="Interfaces\IDataHelper.cs" />
-    <Compile Include="Models\MedicalProcedure.cs" />
+    <Compile Include="CLRFunctions.cs" />
+    <Compile Include="Services\DataService.cs" />
+    <Compile Include="Interfaces\IDataService.cs" />
+    <Compile Include="Models\MedicalTerminology.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SorensenDiceHelper.cs" />
   </ItemGroup>

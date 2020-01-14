@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace SorensenDice.Helper.Interfaces
 {
-    public interface IDataHelper
+    public interface IDataService
     {
-        List<MedicalProcedure> GetAll();
+        List<MedicalTerminology> Search(string searchTerm);
     }
 }

@@ -16,7 +16,7 @@ namespace SorensenDice.Helper
                 return null;
             }
 
-            inputString = normalise(inputString);
+            inputString = Normalise(inputString);
             char[] inputCharArray = inputString.ToCharArray();
 
             int len = inputCharArray.Length;
@@ -44,9 +44,7 @@ namespace SorensenDice.Helper
             return (2 * score) / (fp2.Length + fp1.Length);
         }
 
-
-
-        private static string normalise(string s)
+        private static string Normalise(string s)
         {
             s = s.Replace("'", "");
             s = s.Replace("-", " ");

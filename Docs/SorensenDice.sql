@@ -1,21 +1,27 @@
 /*
 
-https://docs.microsoft.com/en-us/sql/relational-databases/clr-integration-database-objects-user-defined-functions/clr-scalar-valued-functions?view=sql-server-ver15
-https://www.skylinetechnologies.com/Blog/Skyline-Blog/March-2013/CLR-Functions-in-SQL-Server-A-Tutorial
+NOTE: THE ClrFunctions dll needs to be compiled using the same version as the sql server is using. 
+Use the following query to determine this:
 
-create table MedicalProcedure
-(	
-	Code varchar(8) not null primary key,
-	ShortDescription varchar(64),
-	LongDescription varchar(256),
-	MedicalProcedure add Fingerprint varchar(max)
-)
-
-select * from MedicalProcedure
+SELECT Name, Value   
+FROM sys.dm_clr_properties; 
 
 */
 
+GO
 
+IF NOT EXISTS(SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME='MedicalTerminology')
+BEGIN
+	CREATE TABLE MedicalTerminology
+	(	
+		Code nvarchar(8) not null primary key,
+		ShortDescription nvarchar(64),
+		LongDescription nvarchar(256),
+		Fingerprint nvarchar(max)
+	)
+END
+
+GO
 sp_configure 'show advanced options', 1
 RECONFIGURE
 GO
@@ -29,26 +35,51 @@ sp_configure 'show advanced options', 0
 RECONFIGURE
 GO
 
--- drop Assembly SorensenDice.Helper
-create Assembly SorensenDice from 'C:\Users\Jo209000\Documents\CLR Libraries\SorensenDice.Helper.dll' with Permission_set = SAFE
+CREATE ASSEMBLY SorensenDice FROM 'YOUR_PATH\SorensenDice.Helper.dll' WITH PERMISSION_SET = SAFE
 GO
 
-
-SELECT name, value   
-FROM sys.dm_clr_properties;  
-
-
--- drop Function HelloWorld
-Create Function HelloWorld() returns nvarchar(max)
-AS
-	External name SorensenDice.[SorensenDice.Helper.CLRFunctions].HelloWorld
-GO
-
-
--- drop Function HelloWorld
-Create Function ComputeSorensenDiceIndex(@IPFingerprint1 varchar(max), @IPFingerprint2 varchar(max)) returns decimal
+Create Function ComputeSorensenDiceIndex(@IPFingerprint1 NVARCHAR(MAX), @IPFingerprint2 NVARCHAR(MAX)) RETURNS DECIMAL
 AS
 	External name SorensenDice.[SorensenDice.Helper.CLRFunctions].ComputeSorensenDiceIndex
 GO
 
-select dbo.HelloWorld()
+--drop function GetSorensenDiceFingerprint
+Create Function GetSorensenDiceFingerprint(@IPInput NVARCHAR(MAX)) RETURNS NVARCHAR(MAX)
+AS
+	External name SorensenDice.[SorensenDice.Helper.CLRFunctions].GetSorensenDiceFingerprint
+GO
+
+
+UPDATE MedicalTerminology SET Fingerprint = dbo.GetSorensenDiceFingerprint (ShortDescription)
+
+GO
+
+IF EXISTS(SELECT ROUTINE_NAME FROM INFORMATION_SCHEMA.ROUTINES R
+ WHERE ROUTINE_TYPE = 'PROCEDURE' AND ROUTINE_NAME='GetMatchesBySorensenDice')
+	DROP PROCEDURE GetMatchesBySorensenDice
+GO
+CREATE PROCEDURE GetMatchesBySorensenDice
+
+@IPInputFingerprint NVARCHAR(MAX)
+
+AS
+BEGIN
+
+	SELECT 
+		TOP 20
+		Code,
+		ShortDescription,
+		LongDescription,
+		dbo.ComputeSorensenDiceIndex(@IPInputFingerprint, Fingerprint) AS Score
+	FROM
+		MedicalTerminology
+	ORDER BY 
+		Score DESC
+END
+
+GO
+
+-- Test it!
+DECLARE  @fingerprint NVARCHAR(MAX)
+SET @fingerprint = (select dbo.GetSorensenDiceFingerprint ('pulmon exam'));
+EXEC GetMatchesBySorensenDice @fingerprint;
